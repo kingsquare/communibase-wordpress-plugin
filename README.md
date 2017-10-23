@@ -20,6 +20,7 @@ Status: wip, pre-org-internal
     - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
  - [ ] CI (wercker?)
    - [ ] tests (against top x (5?) wordpress versions)
+   - [ ] generate readme.txt from README.md (?)
    - [ ] build & publish dist to [wordpress plugin directory](https://wordpress.org/plugins/developers/add/)
      - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
  - [ ] move to org
