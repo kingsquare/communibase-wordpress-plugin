@@ -20,3 +20,4 @@ Status: wip, pre-org-internal
    - [ ] tests (against top x (5?) wordpress versions)
    - [ ] build & publish dist to [wordpress plugin directory](https://wordpress.org/plugins/developers/add/)
     - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
+ - [ ] move to org
