@@ -73,6 +73,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * Create a new WP_CommunibaseConnector based on the given key, else will use key from plugin settings or from env.
    *
    * @param string|null $key
+   *
+   * @throws \Communibase\Exception
    */
   public function __construct($key = null)
   {
@@ -151,7 +153,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
   }
 
   /**
-   * @throws \Communibase\Exception
+   *
    */
   protected function createConnector($key, $url)
   {
@@ -162,8 +164,6 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * Get the actual Connector and do stuff on it. Using this bypasses all caching.
    *
    * @return Connector
-   *
-   * @throws \Communibase\Exception
    */
   public function getConnector()
   {
@@ -187,32 +187,6 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
     return MINUTE_IN_SECONDS * 5;
   }
 
-  /**
-   * Disable Caching
-   *
-   * @param bool $nextCallOnly
-   *
-   * @return \WP_Communibase_Connector
-   */
-  public function disableCaching($nextCallOnly = false)
-  {
-
-    return $this;
-  }
-
-  /**
-   * Enable Caching
-   *
-   * @param bool $nextCallOnly
-   *
-   * @return \WP_Communibase_Connector
-   */
-  public function enableCaching($nextCallOnly = false)
-  {
-
-    return $this;
-  }
-
   /////////////// BELOW ARE OVERRIDDEN CONNECTOR METHODS THAT IMPLEMENT CACHING
 
   /**
@@ -223,6 +197,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param array $params
    *
    * @return array|mixed|null
+   *
+   * @throws \Communibase\Exception
    */
   public function search($entityType, array $query = [], array $params = [])
   {
@@ -255,6 +231,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param array $params
    *
    * @return array|mixed|null
+   *
+   * @throws \Communibase\Exception
    */
   public function getIds($entityType, array $query = [], array $params = [])
   {
@@ -285,6 +263,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param $id
    *
    * @return bool
+   *
+   * @throws \Communibase\Exception
    */
   public function isIdA($entityType, $id)
   {
@@ -366,9 +346,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
       return null;
     }
 
-    $identifier = md5(json_encode([__METHOD__, func_get_args()]));
-
-    return $identifier;
+    return md5(json_encode([__METHOD__, func_get_args()]));
   }
 
   /**
@@ -382,6 +360,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param string $id id string for the file-entity
    *
    * @return string Binary contents of the file.
+   *
+   * @throws \Communibase\Exception
    */
   public function getBinary($id)
   {
@@ -394,7 +374,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
       }
     }
 
-    $data = (string)$this->connector->getBinary($id);
+      /** @noinspection SuspiciousAssignmentsInspection */
+      $data = (string)$this->connector->getBinary($id);
 
     if (empty($data) || ! empty($data['message'])) {
       return $data;
@@ -447,10 +428,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
       return null;
     }
 
-    $identifier = md5(json_encode([__METHOD__, func_get_args()]));
-
-    return $identifier;
-
+    return md5(json_encode([__METHOD__, func_get_args()]));
   }
 
   /**
@@ -508,6 +486,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param array $params (optional)
    *
    * @return array entities
+   *
+   * @throws Exception
    */
   public function getByIds($entityType, array $ids, array $params = [])
   {
@@ -521,6 +501,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param array $params (optional)
    *
    * @return array|null
+   *
+   * @throws Exception
    */
   public function getAll($entityType, array $params = [])
   {
@@ -616,6 +598,8 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    * @param string $id
    *
    * @return array resultData
+   *
+   * @throws Exception
    */
   public function destroy($entityType, $id)
   {
@@ -629,7 +613,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    */
   public function isIdValid($id)
   {
-    return $this->connector->isIdValid($id);
+    return Connector::isIdValid($id);
   }
 
   /**
@@ -644,7 +628,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
    */
   public function generateId()
   {
-    return $this->connector->generateId();
+    return Connector::generateId();
   }
 
   /**
