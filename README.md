@@ -1,6 +1,6 @@
 ![Communibase](https://www.communibase.nl/img/siteLogo.png "Communibase")
 
-# Wordpress Communibase API Plugin
+# Wordpress Communibase API Support
 
 Adds Communibase API support to Wordpress.
 
@@ -16,8 +16,10 @@ Status: wip, pre-org-internal
  - [x] add license
  - [ ] WP Plugin Reqs https://codex.wordpress.org/Writing_a_Plugin
     - [ ] WP Coding Standards https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ - [ ] Wordpress Plugin Registration
+    - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
  - [ ] CI (wercker?)
    - [ ] tests (against top x (5?) wordpress versions)
    - [ ] build & publish dist to [wordpress plugin directory](https://wordpress.org/plugins/developers/add/)
-    - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
+     - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
  - [ ] move to org
