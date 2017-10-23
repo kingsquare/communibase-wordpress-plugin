@@ -321,7 +321,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
       return [];
     }
 
-    $identifier = $this->getByIdIdentifierCache($entityType, $data['_id'], []);
+    $identifier = $this->getByIdIdentifierCache($entityType, $data['_id'], $params);
     if ($identifier) {
       set_transient($identifier, $data, $this->getCacheTimeout());
     }
