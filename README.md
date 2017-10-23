@@ -9,6 +9,7 @@ Status: WIP
 ## TODO
 
  - [x] add license
+ - [ ] WP Coding Standards https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  - [ ] CI (wercker?)
    - [ ] tests (against top x (5?) wordpress versions)
    - [ ] build & publish dist to [wordpress plugin directory](https://wordpress.org/plugins/developers/add/)

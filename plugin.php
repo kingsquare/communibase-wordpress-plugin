@@ -5,6 +5,7 @@
  * Version: 0.0.1
  * Author: Kingsquare BV
  * Author URI: https://kingsquare.nl
+ * Plugin URI: https://github.com/AubreyHewes/communibase-wordpress-plugin
  */
 defined('ABSPATH') or die;
 define('COMMUNIBASE_PLUGIN_FILE', __FILE__);
