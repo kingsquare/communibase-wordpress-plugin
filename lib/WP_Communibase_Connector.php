@@ -14,7 +14,7 @@ use Communibase\Connector;
  * <code>communibase.api_host</code> (optional)
  *
  * This caches certain Communibase API calls; reducing network calls. Default cache expiration is a half
- * hour (this can be overridden via fluid caching methods before the call).
+ * hour (this can be overridden).
  *
  * In a DEVELOPMENT environment there is no caching; due to the expected API URI to also be a development version.
  * You can also use the configured Connector directly via <code>getConnector()</code>
@@ -30,7 +30,7 @@ use Communibase\Connector;
  *
  * All other unwrapped methods are directly available (via __call magic).
  *
- * List unwrapped/magic methods here for IDE completion (if ever wrapped then remove the method):
+ * DEV note: List unwrapped/magic methods here for IDE completion (if ever wrapped then remove the method):
  * (@see http://phpdoc.org/docs/latest/references/phpdoc/tags/method.html)
  *
  */
@@ -69,8 +69,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
   private $options = [];
 
   /**
-   *
-   * Create a new WP_CommunibaseConnector based on the given key, else will use key from plugin settings or from env.
+   * Create a new WP_Communibase_Connector based on the given key, else will use key from plugin settings or from env.
    *
    * @param string|null $key
    *
@@ -184,7 +183,7 @@ class WP_Communibase_Connector implements \Communibase\ConnectorInterface
     }
 
     // https://codex.wordpress.org/Transients_API#Using_Time_Constants
-    return MINUTE_IN_SECONDS * 5;
+    return MINUTE_IN_SECONDS * 15;
   }
 
   /////////////// BELOW ARE OVERRIDDEN CONNECTOR METHODS THAT IMPLEMENT CACHING
