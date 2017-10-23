@@ -1,6 +1,6 @@
 ![Communibase](https://www.communibase.nl/img/siteLogo.png "Communibase")
 
-# Wordpress Communibase API Plugin
+# Wordpress Communibase API Support
 
 Adds Communibase API support to Wordpress.
 
