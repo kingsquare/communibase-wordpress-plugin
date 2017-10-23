@@ -1,6 +1,6 @@
 ![Communibase](https://www.communibase.nl/img/siteLogo.png "Communibase")
 
-# Communibase API Support Wordpress Plugin
+# Wordpress Communibase API Support Plugin
 
 Adds Communibase API support to Wordpress. This adds a setting screen for setting the API-key and a `WP_Communibase_Connector` class that can be used to access the api.
 
