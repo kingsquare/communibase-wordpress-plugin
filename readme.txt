@@ -15,17 +15,17 @@ Communibase API Support
 
 [Communibase](https://www.communibase.nl) is a paid service for membership administration. See [https://www.communibase.nl](https://www.communibase.nl) for connection details.
 
-This plugin currently only adds a setting screen for setting the API-key and a `WP_Communibase_Connector` delegate that can be used to access the API.
-The delegate currently only adds a `Transient_API` caching layer.
+This plugin currently adds a setting screen for setting the API-key / host and a `WP_Communibase_Connector` delegate that can be used to access the API.
+`WP_Communibase_Connector` delegates to the [Communibase PHP API Connector](https://github.com/kingsquare/communibase-connector-php). The delegate currently only adds a [Transient_API](https://codex.wordpress.org/Transients_API) caching layer and a few convenience methods. It is possible to use the `\Communibase\Connector` directly.
 
 == Screenshots ==
 TODO
 
 == Frequently Asked Questions ==
-TODO
+TODO on dist build add from latest wiki
 
 == Upgrade Notice ==
-TODO
+TODO on dist build add from latest release
 
 == Changelog ==
 TODO on dist build add from latest release/commits
