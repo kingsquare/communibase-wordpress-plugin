@@ -1,0 +1,11 @@
+{
+  "type": "wordpress-plugin",
+  "autoload": {
+    "psr-0": {
+      "WP_Communibase\\": "lib/"
+    }
+  },
+  "require": {
+    "kingsquare/communibase-connector-php": "^2.5"
+  }
+}
