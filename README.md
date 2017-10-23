@@ -14,7 +14,8 @@ Status: wip, pre-org-internal
 ## TODO
 
  - [x] add license
- - [ ] WP Coding Standards https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ - [ ] WP Plugin Reqs https://codex.wordpress.org/Writing_a_Plugin
+    - [ ] WP Coding Standards https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  - [ ] CI (wercker?)
    - [ ] tests (against top x (5?) wordpress versions)
    - [ ] build & publish dist to [wordpress plugin directory](https://wordpress.org/plugins/developers/add/)
