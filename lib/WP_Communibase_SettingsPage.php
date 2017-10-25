@@ -48,8 +48,15 @@ class WP_Communibase_SettingsPage
     ?>
     <div>
       <a target="_blank" rel="noopener" href="https://www.communibase.nl">
-        <img src="<?php echo plugins_url('communibase/assets/siteLogo.png') ?>" />
+        <img src="<?php echo plugins_url('communibase/assets/siteLogo.png') ?>"/>
       </a>
+    </div>
+    <div class="communibase-unknown-info">
+      <a href="https://www.communibase.nl" target="_blank" rel="noopener">Communibase</a> is a paid service for community/association/club/society membership administration.
+      <ul>
+        <li><a href="https://www.communibase.nl/#openLogin" target="_blank" rel="noopener">Request a demo account</a></li>
+        <li><a href="https://www.communibase.nl" target="_blank" rel="noopener">More information</a></li>
+      </ul>
     </div>
     <div class="wrap">
       <form method="post" action="options.php">
@@ -57,9 +64,58 @@ class WP_Communibase_SettingsPage
         // This prints out all hidden setting fields
         settings_fields('communibase');
         do_settings_sections('communibase');
+        ?>
+        <input type="button" name="validateConnection" id="comunibase-validateConnection" class="button button-primary" value="Validate connection">
+        <?php
         submit_button();
         ?>
       </form>
+      <script>
+        var $apiKeyInputEl = jQuery('#communibase_api_key');
+        var currentCommunibaseApiKey = null;
+        var $apiKeyCheckStatusEl = jQuery('.communibase-api-key-check');
+
+        function communibase_validateKey() {
+          return;
+          if ($apiKeyInputEl.val() === '') {
+            return;
+          }
+          currentCommunibaseApiKey = $apiKeyInputEl.val();
+          $apiKeyCheckStatusEl
+            .html('<img src="<?php echo plugins_url('communibase/assets/icons/loading.gif') ?>" />');
+          jQuery.post('/wp-json/communibase/0.1/validateKey', {
+            key: jQuery(this).val()
+          }).then(function (res) {
+            var statusIcon = '<?php echo plugins_url('communibase/assets/icons/famfamfam/tick.png') ?>';
+            if (!res) {
+              statusIcon = '<?php echo plugins_url('communibase/assets/icons/famfamfam/cross.png') ?>';
+            }
+            $apiKeyCheckStatusEl.find('img').attr('src', statusIcon);
+          }).fail(function (res) {
+            console.log(res);
+            var statusIcon = '<?php echo plugins_url('communibase/assets/icons/famfamfam/cross.png') ?>';
+            $apiKeyCheckStatusEl.addClass('danger').find('img').attr('src', statusIcon).after('<div>' +  res.responseJSON.message + '</div>');
+          });
+        }
+
+        jQuery('#comunibase-validateConnection').on('click', communibase_validateKey).trigger('click');
+        jQuery('#communibase_api_url, #communibase_api_custom_url, #communibase_api_custom_host').parent().parent().hide();
+      </script>
+      <style>
+        .communibase-api-key-check {
+          display: inline-block;
+          vertical-align: middle;
+        }
+
+        .communibase-api-key-check img,
+        .communibase-api-key-check div {
+          display: inline-block;
+        }
+        .communibase-api-key-check.danger {
+          color: red;
+        }
+
+      </style>
     </div>
     <?php
   }
@@ -75,8 +131,8 @@ class WP_Communibase_SettingsPage
 
     add_settings_section(
       'communibase_section_id', // ID
-      'Settings', // Title
-      array($this, 'print_section_info'), // Callback
+      '', // Title
+      '', // Callback
       'communibase' // Page
     );
 
@@ -88,20 +144,43 @@ class WP_Communibase_SettingsPage
       'communibase_section_id' // Section
     );
 
+    add_settings_section(
+      'communibase_section_deviant', // ID
+      '', // Title
+      array($this, 'print_deviant_section_info'), // Callback
+      'communibase' // Page
+    );
+
+    add_settings_field(
+      'api_custom_url',
+      'Use deviant API',
+      array($this, 'renderFieldUseProdApi'), // Callback
+      'communibase',
+      'communibase_section_deviant'
+    );
+
     add_settings_field(
       'api_url',
       'API URL',
       array($this, 'renderFieldApiUrl'), // Callback
       'communibase',
-      'communibase_section_id'
+      'communibase_section_deviant'
+    );
+
+    add_settings_field(
+      'api_url_custom',
+      'Custom API URL',
+      array($this, 'renderFieldCustomApiUrl'), // Callback
+      'communibase',
+      'communibase_section_deviant'
     );
 
     add_settings_field(
       'api_host',
-      'API URL Host',
-      array($this, 'renderFieldApiHost'), // Callback
+      'Custom API URL Host',
+      array($this, 'renderFieldCustomApiHost'), // Callback
       'communibase',
-      'communibase_section_id'
+      'communibase_section_deviant'
     );
   }
 
@@ -133,9 +212,17 @@ class WP_Communibase_SettingsPage
   /**
    * Print the Section text
    */
-  public function print_section_info()
+  public function print_main_section_info()
   {
-    print 'Enter your connection settings below:';
+    print 'Enter your connection settings';
+  }
+
+  /**
+   * Print the Section text
+   */
+  public function print_deviant_section_info()
+  {
+    print 'In some cases you may need to use a deviant API, in this case set the following';
   }
 
   /**
@@ -144,9 +231,23 @@ class WP_Communibase_SettingsPage
   public function renderFieldApiKey()
   {
     printf(
-      '<input type="text" id="communibase_api_key" name="communibase[api_key]" value="%s" placeholder="" />',
+      '<input type="text" id="communibase_api_key" name="communibase[api_key]" value="%s" placeholder="" />' .
+      '<div class="communibase-api-key-check"></div>',
       isset($this->options['api_key']) ? esc_attr($this->options['api_key']) : ''
     );
+  }
+
+  const API_PRODUCTION = 'https://api.communibase.nl/0.1/';
+
+  /**
+   *
+   */
+  public function renderFieldUseProdApi()
+  {
+    $isProductionApi = empty($this->options['api_url']) || $this->options['api_url'] === self::API_PRODUCTION;
+    echo '<input type="checkbox" id="communibase_use_deviant_api" name="communibase[use_deviant_api]" ' .
+      ($isProductionApi ? '' : 'checked="checked"') .
+      '/>';
   }
 
   /**
@@ -154,8 +255,21 @@ class WP_Communibase_SettingsPage
    */
   public function renderFieldApiUrl()
   {
+    // <input type="text" id="communibase_api_url" name="communibase[api_url]" value="%s" placeholder="https://api.communibase.nl/0.1/"/>
     printf(
-      '<input type="text" id="communibase_api_url" name="communibase[api_url]" value="%s" placeholder="https://api.communibase.nl/0.1/"/>',
+      '<select id="communibase_api_url" name="communibase[api_url]" >' .
+      '<option value="https://api.communibase.nl/0.1/">PRODUCTION (https://api.communibase.nl/0.1/)</option>' .
+      '<option value="https://api.staging.communibase.nl/0.1/">STAGING (https://api.staging.communibase.nl/0.1/)</option>' .
+      '<option value="-1">CUSTOM</option>' .
+      '</select>',
+      isset($this->options['api_url']) ? esc_attr($this->options['api_url']) : ''
+    );
+  }
+
+  public function renderFieldCustomApiUrl()
+  {
+    printf(
+      '<input type="text" id="communibase_api_custom_url" name="communibase[api_url]" value="%s" placeholder="https://api.communibase.nl/0.1/"/>',
       isset($this->options['api_url']) ? esc_attr($this->options['api_url']) : ''
     );
   }
@@ -163,10 +277,10 @@ class WP_Communibase_SettingsPage
   /**
    * Get the settings option array and print one of its values
    */
-  public function renderFieldApiHost()
+  public function renderFieldCustomApiHost()
   {
     printf(
-      '<input type="text" id="communibase_api_host" name="communibase[api_host]" value="%s" />',
+      '<input type="text" id="communibase_api_custom_host" name="communibase[api_host]" value="%s" />',
       isset($this->options['api_host']) ? esc_attr($this->options['api_host']) : ''
     );
   }

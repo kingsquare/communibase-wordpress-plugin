@@ -21,8 +21,14 @@ require_once __DIR__ . '/lib/WP_Communibase_Connector.php';
 
 // Add Admin Settings page
 if (is_admin()) {
+
+  // Init Settings Page
   require_once __DIR__ . '/lib/WP_Communibase_SettingsPage.php';
   new WP_Communibase_SettingsPage();
 }
+
+// Init API endpoints
+require_once __DIR__ . '/lib/api/WP_Communibase_API.php';
+WP_Communibase_API::init();
 
 // non-admin enqueues, actions, and filters
