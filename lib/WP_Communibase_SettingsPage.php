@@ -15,14 +15,14 @@ class WP_Communibase_SettingsPage
    */
   public function __construct()
   {
-    add_action('admin_menu', array($this, 'add_plugin_page'));
+    add_action('admin_menu', array($this, 'add_plugin_menu'));
     add_action('admin_init', array($this, 'page_init'));
   }
 
   /**
    * Add options page
    */
-  public function add_plugin_page()
+  public function add_plugin_menu()
   {
     // for now we just put the settings as a sub menu in the settings menu
     // This page will be under "Settings"
@@ -43,6 +43,14 @@ class WP_Communibase_SettingsPage
     if ( ! current_user_can('manage_options')) {
       wp_die(__('You do not have sufficient permissions to access this page.'));
     }
+
+    if ($_SERVER['HTTP_HOST'] === 'communibase-wordpress-plugin.localhost.kingsquare.eu:8080') {
+      wp_enqueue_script('communibase-bundle-js', plugins_url('communibase/assets/bundle.dev.js'), [], null);
+    } else {
+      wp_enqueue_script('communibase-bundle-js', plugins_url('communibase/assets/bundle.min.js'), [], COMMUNIBASE_VERSION);
+      wp_enqueue_style('communibase-bundle-css', plugins_url('communibase/assets/bundle.min.css'), [], COMMUNIBASE_VERSION);
+    }
+
     // Set class property
     $this->options = get_option('communibase');
     ?>
@@ -51,13 +59,11 @@ class WP_Communibase_SettingsPage
         <img src="<?php echo plugins_url('communibase/assets/siteLogo.png') ?>"/>
       </a>
     </div>
-    <div class="communibase-unknown-info">
-      <a href="https://www.communibase.nl" target="_blank" rel="noopener">Communibase</a> is a paid service for community/association/club/society membership administration.
-      <ul>
-        <li><a href="https://www.communibase.nl/#openLogin" target="_blank" rel="noopener">Request a demo account</a></li>
-        <li><a href="https://www.communibase.nl" target="_blank" rel="noopener">More information</a></li>
-      </ul>
+
+    <div id="communibase-plugin-app">
+
     </div>
+
     <div class="wrap">
       <form method="post" action="options.php">
         <?php
@@ -65,57 +71,10 @@ class WP_Communibase_SettingsPage
         settings_fields('communibase');
         do_settings_sections('communibase');
         ?>
-        <input type="button" name="validateConnection" id="comunibase-validateConnection" class="button button-primary" value="Validate connection">
         <?php
         submit_button();
         ?>
       </form>
-      <script>
-        var $apiKeyInputEl = jQuery('#communibase_api_key');
-        var currentCommunibaseApiKey = null;
-        var $apiKeyCheckStatusEl = jQuery('.communibase-api-key-check');
-
-        function communibase_validateKey() {
-          return;
-          if ($apiKeyInputEl.val() === '') {
-            return;
-          }
-          currentCommunibaseApiKey = $apiKeyInputEl.val();
-          $apiKeyCheckStatusEl
-            .html('<img src="<?php echo plugins_url('communibase/assets/icons/loading.gif') ?>" />');
-          jQuery.post('/wp-json/communibase/0.1/validateKey', {
-            key: jQuery(this).val()
-          }).then(function (res) {
-            var statusIcon = '<?php echo plugins_url('communibase/assets/icons/famfamfam/tick.png') ?>';
-            if (!res) {
-              statusIcon = '<?php echo plugins_url('communibase/assets/icons/famfamfam/cross.png') ?>';
-            }
-            $apiKeyCheckStatusEl.find('img').attr('src', statusIcon);
-          }).fail(function (res) {
-            console.log(res);
-            var statusIcon = '<?php echo plugins_url('communibase/assets/icons/famfamfam/cross.png') ?>';
-            $apiKeyCheckStatusEl.addClass('danger').find('img').attr('src', statusIcon).after('<div>' +  res.responseJSON.message + '</div>');
-          });
-        }
-
-        jQuery('#comunibase-validateConnection').on('click', communibase_validateKey).trigger('click');
-        jQuery('#communibase_api_url, #communibase_api_custom_url, #communibase_api_custom_host').parent().parent().hide();
-      </script>
-      <style>
-        .communibase-api-key-check {
-          display: inline-block;
-          vertical-align: middle;
-        }
-
-        .communibase-api-key-check img,
-        .communibase-api-key-check div {
-          display: inline-block;
-        }
-        .communibase-api-key-check.danger {
-          color: red;
-        }
-
-      </style>
     </div>
     <?php
   }

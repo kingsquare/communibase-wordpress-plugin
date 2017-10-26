@@ -1,0 +1,16 @@
+.test {
+
+}
+
+.communibase-api-key-check {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.communibase-api-key-check img,
+.communibase-api-key-check div {
+  display: inline-block;
+}
+.communibase-api-key-check.danger {
+  color: red;
+}
