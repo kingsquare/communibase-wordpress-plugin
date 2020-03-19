@@ -13,7 +13,6 @@ Status: wip, pre-org-internal
 
 ## TODO
 
- - [x] add license
  - [ ] WP Plugin Reqs https://codex.wordpress.org/Writing_a_Plugin
     - [ ] WP Coding Standards https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  - [ ] Wordpress Plugin Registration
