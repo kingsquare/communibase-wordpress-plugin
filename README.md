@@ -23,4 +23,3 @@ Status: wip, pre-org-internal
    - [ ] generate readme.txt from README.md (?)
    - [ ] build & publish dist to [wordpress plugin directory](https://wordpress.org/plugins/developers/add/)
      - [ ] http://jeremypry.com/wordpress-plugin-development-with-github/
- - [ ] move to org
